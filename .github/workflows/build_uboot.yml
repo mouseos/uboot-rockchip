@@ -33,7 +33,7 @@ jobs:
           git clone https://github.com/rockchip-linux/rkbin --depth 1 ../rkbin
       - name: clone U-Boot
         run: |
-          git clone  --depth=1  https://github.com/rockchip-linux/u-boot
+          git clone --depth=1 https://github.com/rockchip-linux/u-boot
       - name: Build U-Boot
         working-directory: u-boot
         run: |
