@@ -18,7 +18,7 @@ jobs:
           export BL31=$(pwd)/build/rk3399/release/bl31/bl31.elf
 
       - name: Clone U-Boot repository
-        run: git clone --depth=1 https://source.denx.de/u-boot/custodians/u-boot-rockchip.git
+        run: git clone --depth=1 https://github.com/rockchip-linux/u-boot.git
 
       - name: Build U-Boot
         working-directory: ./u-boot-rockchip/
