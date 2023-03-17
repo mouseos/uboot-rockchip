@@ -21,7 +21,7 @@ jobs:
 
     - name: Build U-Boot
       run: |
-        make CROSS_COMPILE=aarch64-linux-gnu- evb-rk3399_defconfig
+        make ARCH=arm CROSS_COMPILE=$(pwd)/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu- evb-rk3399_defconfig
         make ARCH=arm CROSS_COMPILE=$(pwd)/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
         make u-boot.itb
 
