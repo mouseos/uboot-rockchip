@@ -1,38 +1,37 @@
-name: Build U-Boot
+name: Build U-Boot for Rockchip
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clone U-Boot repository
-      run: |
-       git clone https://source.denx.de/u-boot/custodians/u-boot-rockchip
+      - name: Install dependencies
+        run: sudo apt-get install -y gcc-aarch64-linux-gnu
+      - name: Build ATF
+        run: |
+          git clone https://github.com/ARM-software/arm-trusted-firmware.git
+          cd arm-trusted-firmware
+          make realclean
+          make CROSS_COMPILE=aarch64-linux-gnu- PLAT=rk3399
+          ls
 
-    - name: Download and extract GCC cross-compiler
-      run: |
-        curl -OL https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/aarch64-linux-gnu/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
-        tar xvf gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz -C $(pwd)
+      - name: Clone U-Boot repository
+        run: git clone --depth=1 https://source.denx.de/u-boot/custodians/u-boot-rockchip.git
 
-    - name: Build U-Boot
-      run: |
-        export ARCH=arm 
-        export CROSS_COMPILE=$(pwd)/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
-        make evb-rk3399_defconfig
-        make -j4
-        make u-boot.itb
-
-    - name: Upload U-Boot artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: u-boot
-        path: |
-          u-boot/u-boot.bin
-          u-boot/u-boot.itb
-          u-boot/spl/u-boot-spl.bin
-          u-boot/tpl/u-boot-tpl.bin
+      - name: Build U-Boot
+        working-directory: ./u-boot-rockchip/
+        run: |
+          make CROSS_COMPILE=aarch64-linux-gnu- evb-rk3399_defconfig
+          make ARCH=arm CROSS_COMPILE=aarch64-linux-gnu-
+          make u-boot.itb
+      - name: Upload U-Boot binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: u-boot-binaries
+          path: |
+            ./u-boot-rockchip/u-boot.bin
+            ./u-boot-rockchip/u-boot.itb
+            ./u-boot-rockchip/spl/u-boot-spl.bin
+            ./u-boot-rockchip/tpl/u-boot-tpl.bin
