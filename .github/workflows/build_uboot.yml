@@ -10,10 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout U-Boot repository
-      uses: actions/checkout@v2
-      with:
-        repository: u-boot/custodians/u-boot-rockchip
+    - name: Clone U-Boot repository
+      run: |
+       git clone https://source.denx.de/u-boot/custodians/u-boot-rockchip
 
     - name: Download and extract GCC cross-compiler
       run: |
