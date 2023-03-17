@@ -38,6 +38,7 @@ jobs:
           export ARCH=arm64
           export CROSS_COMPILE=$(pwd)/gcc-linaro_aarch64-linux-gnu/bin/aarch64-linux-gnu-
           sed -i 's/TOOLCHAIN_ARM64=.*/TOOLCHAIN_ARM64=\/usr\/local\/gcc-linaro_aarch64-linux-gnu\/bin/g' make.sh
+          cat make.sh
           ./make.sh evb-rk3399
       - name: Upload
         uses: actions/upload-artifact@v3
