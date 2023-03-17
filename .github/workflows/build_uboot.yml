@@ -32,7 +32,7 @@ jobs:
           sudo ln -s $(pwd)/gcc-linaro*aarch64-linux-gnu /usr/local/gcc-linaro_aarch64-linux-gnu
           git clone https://github.com/rockchip-linux/rkbin --depth 1 ../rkbin
           
-      - name: clone U-Boot
+      - name: Clone U-Boot
         run: |
           git clone --depth=1 https://github.com/rockchip-linux/u-boot
           
