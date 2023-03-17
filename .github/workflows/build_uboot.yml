@@ -20,7 +20,9 @@ jobs:
         with:
           path: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
           key: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
-
+      - name: Clone U-Boot
+        run: |
+          git clone --depth=1 https://github.com/rockchip-linux/u-boot
       - name: Install toolchain
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: u-boot
@@ -29,10 +31,6 @@ jobs:
           tar xvf gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu.tar.xz -C ./
           sudo ln -s $(pwd)/gcc-linaro*aarch64-linux-gnu /usr/local/gcc-linaro_aarch64-linux-gnu
           git clone https://github.com/rockchip-linux/rkbin --depth 1 ../rkbin
-          
-      - name: Clone U-Boot
-        run: |
-          git clone --depth=1 https://github.com/rockchip-linux/u-boot
           
       - name: Build U-Boot
         working-directory: u-boot
