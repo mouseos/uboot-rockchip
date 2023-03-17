@@ -21,7 +21,7 @@ jobs:
         run: git clone --depth=1 https://github.com/rockchip-linux/u-boot.git
 
       - name: Build U-Boot
-        working-directory: ./u-boot-rockchip/
+        working-directory: ./u-boot
         run: |
           make CROSS_COMPILE=aarch64-linux-gnu- evb-rk3399_defconfig
           make CROSS_COMPILE=aarch64-linux-gnu-
@@ -31,7 +31,7 @@ jobs:
         with:
           name: u-boot-binaries
           path: |
-            ./u-boot-rockchip/u-boot.bin
-            ./u-boot-rockchip/u-boot.itb
-            ./u-boot-rockchip/spl/u-boot-spl.bin
-            ./u-boot-rockchip/tpl/u-boot-tpl.bin
+            ./u-boot/u-boot.bin
+            ./u-boot/u-boot.itb
+            ./u-boot/spl/u-boot-spl.bin
+            ./u-boot/tpl/u-boot-tpl.bin
