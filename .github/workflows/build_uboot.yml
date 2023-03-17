@@ -1,0 +1,31 @@
+name: Build U-Boot for Rockchip
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get install -y gcc-aarch64-linux-gnu
+
+      - name: Clone U-Boot repository
+        run: git clone https://source.denx.de/u-boot/custodians/u-boot-rockchip.git
+
+      - name: Build U-Boot
+        working-directory: ./u-boot-rockchip/
+        run: |
+          make CROSS_COMPILE=aarch64-linux-gnu- evb-rk3399_defconfig
+          make ARCH=arm CROSS_COMPILE=aarch64-linux-gnu-
+          make u-boot.itb
+
+      - name: Upload U-Boot binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: u-boot-binaries
+          path: |
+            ./u-boot-rockchip/u-boot.bin
+            ./u-boot-rockchip/u-boot.itb
+            ./u-boot-rockchip/spl/u-boot-spl.bin
+            ./u-boot-rockchip/tpl/u-boot-tpl.bin
