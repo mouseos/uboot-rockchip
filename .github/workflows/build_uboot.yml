@@ -32,9 +32,8 @@ jobs:
       - name: Build U-Boot
         working-directory: u-boot
         run: |
-          export CFLAGS="-Wno-error"
-          export CXXFLAGS="-Wno-error"
           export BL31=../arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf
+          sed s/"Werror"/"Wno-error"/g Makefile
           make evb-rk3399_defconfig
           make CROSS_COMPILE=aarch64-linux-gnu-
       - name: Upload
