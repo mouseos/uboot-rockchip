@@ -11,7 +11,7 @@ jobs:
         run: sudo apt-get install -y gcc-aarch64-linux-gnu
 
       - name: Clone U-Boot repository
-        run: git clone https://source.denx.de/u-boot/custodians/u-boot-rockchip.git
+        run: git clone --depth=1 https://source.denx.de/u-boot/custodians/u-boot-rockchip.git
 
       - name: Build U-Boot
         working-directory: ./u-boot-rockchip/
