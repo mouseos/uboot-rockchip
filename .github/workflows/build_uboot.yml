@@ -28,7 +28,7 @@ jobs:
         working-directory: u-boot
         run: |
           sudo apt install gcc-aarch64-linux-gnu
-      - bame: Build ATF
+      - name: Build ATF
         run: |
           git clone --depth 1 https://github.com/ARM-software/arm-trusted-firmware.git
           cd arm-trusted-firmware
