@@ -33,9 +33,8 @@ jobs:
         working-directory: u-boot
         run: |
           export BL31=../arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf
-          sed s/"-fshort-wchar -Werror"/"-fshort-wchar -w"/g Makefile
-          make evb-rk3399_defconfig
-          make CROSS_COMPILE=aarch64-linux-gnu-
+          CFLAGS=-Wno-error make evb-rk3399_defconfig
+          CFLAGS=-Wno-error make CROSS_COMPILE=aarch64-linux-gnu-
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
