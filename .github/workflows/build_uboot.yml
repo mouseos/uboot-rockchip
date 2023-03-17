@@ -14,12 +14,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Cache
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu
-          key: gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu
       - name: Clone U-Boot
         run: |
           git clone --depth=1 https://github.com/rockchip-linux/u-boot
@@ -27,7 +21,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: u-boot
         run: |
-          sudo apt install gcc-aarch64-linux-gnu
+          sudo apt install gcc-aarch64-linux-gnu gcc-arm-none-eabi -y
       - name: Build ATF
         run: |
           git clone --depth 1 https://github.com/ARM-software/arm-trusted-firmware.git
