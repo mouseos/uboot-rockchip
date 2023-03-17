@@ -24,7 +24,7 @@ jobs:
         working-directory: ./u-boot-rockchip/
         run: |
           make CROSS_COMPILE=aarch64-linux-gnu- evb-rk3399_defconfig
-          make ARCH=arm CROSS_COMPILE=aarch64-linux-gnu-
+          make CROSS_COMPILE=aarch64-linux-gnu-
           make u-boot.itb
       - name: Upload U-Boot binaries
         uses: actions/upload-artifact@v2
