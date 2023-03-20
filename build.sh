@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install toolchains
-sudo apt install gcc-aarch64-linux-gnu 
-pip3 install pyelftools
+sudo apt remove python3
+sudo apt install python2 gcc-aarch64-linux-gnu 
 pip install pyelftools
 # Create a directory to work in
 mkdir ~/evb_rk3399
