@@ -20,7 +20,7 @@ git clone https://github.com/rockchip-linux/u-boot.git
 cd arm-trusted-firmware
 make realclean
 make CROSS_COMPILE=aarch64-linux-gnu- PLAT=rk3399 bl31
-cp bl31.elf ../u-boot/
+cp ~/evb_rk3399/arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf ~/evb_rk3399/u-boot/
 
 # Compile U-Boot
 cd ../u-boot
