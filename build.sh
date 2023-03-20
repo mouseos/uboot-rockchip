@@ -1,4 +1,6 @@
 #!/bin/bash
+# Install toolchains
+sudo  apt install gcc-aarch64-linux-gnu
 # Create a directory to work in
 mkdir ~/evb_rk3399
 cd ~/evb_rk3399
