@@ -12,20 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y build-essential gcc-aarch64-linux-gnu
+    - name: Build
+      run: bash build.sh
 
-    - name: Build ATF
-      run: |
-        cd arm-trusted-firmware
-        make realclean
-        make CROSS_COMPILE=aarch64-linux-gnu- PLAT=rk3399 bl31
-        cp bl31.elf ../u-boot/
-
-    - name: Build U-Boot
-      run: |
-        cd u-boot
-        make evb-rk3399_defconfig
-        make CROSS_COMPILE=aarch64-linux-gnu-
-        make
-        make u-boot.itb
+    
