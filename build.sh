@@ -21,6 +21,7 @@ cp bl31.elf ../u-boot/
 cd ../u-boot
 export ARCH=arm64
 export CROSS_COMPILE=aarch64-linux-gnu-
+sed -i 's/-Werror//' Makefile
 make evb-rk3399_defconfig
 make
 make u-boot.itb
