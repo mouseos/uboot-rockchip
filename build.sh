@@ -1,7 +1,10 @@
 #!/bin/bash
 # Install toolchains
-sudo apt remove python3
-sudo apt install python2 gcc-aarch64-linux-gnu 
+sudo apt remove python3 python3-pip
+sudo apt install curl python2 gcc-aarch64-linux-gnu 
+#Install pip2
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+sudo python2 get-pip.py
 pip install pyelftools
 # Create a directory to work in
 mkdir ~/evb_rk3399
