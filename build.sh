@@ -9,7 +9,7 @@ cd ~/evb_rk3399
 git clone https://github.com/ARM-software/arm-trusted-firmware.git
 git clone https://github.com/rockchip-linux/rkbin.git
 git clone https://github.com/rockchip-linux/rkdeveloptool.git
-git clone https://github.com/u-boot/u-boot.git
+git clone https://github.com/rockchip-linux/u-boot.git
 
 # Compile the ATF
 cd arm-trusted-firmware
