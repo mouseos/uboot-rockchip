@@ -1,75 +1,28 @@
-name: Build U-Boot
+name: Build EDK2 for RK3399
 
-on:
-  push:
-  workflow_dispatch:
+on: [push]
 
 jobs:
   build:
-    name: Build U-Boot
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '2.x'
-          cache: 'pip'
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl device-tree-compiler gcc-arm-none-eabi gcc-aarch64-linux-gnu libudev-dev libusb-1.0-0-dev dh-autoreconf
-          python2 -m pip --no-python-version-warning --disable-pip-version-check install -r requirements.txt
-
-      - name: Clone repositories
-        run: |
-          git clone --depth 1 $GITHUB_SERVER_URL/ARM-software/arm-trusted-firmware
-          git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkbin
-          git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkdeveloptool
-          git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/u-boot
-
-      - name: Compile ATF
-        working-directory: arm-trusted-firmware
-        run: |
-          make realclean
-          make CROSS_COMPILE=aarch64-linux-gnu- PLAT=rk3399 bl31
-          cp build/rk3399/release/bl31/bl31.elf ../u-boot/
-
-      - name: Compile U-Boot
-        working-directory: u-boot
-        run: |
-          export ARCH=arm64
-          export CROSS_COMPILE=aarch64-linux-gnu-
-          sed -i -e 's/-Werror//' Makefile
-          cp ../rk3399-evb.dts arch/arm/dts/rk3399-evb.dts
-          echo "CONFIG_BOOTDELAY=5" >> configs/evb-rk3399_defconfig
-          make evb-rk3399_defconfig
-          make
-          make u-boot.itb
-
-      - name: Install rkdeveloptool
-        working-directory: rkdeveloptool
-        run: |
-          autoreconf -i
-          ./configure
-          make
-          sudo make install
-
-      - name: Pack image
-        working-directory: rkbin
-        run: |
-          cp ../arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf rk33 
-          sed -i -e "s|bin/rk33/rk3399_bl3|$GITHUB_WORKSPACE/rkbin/bin/rk33/rk3399_bl3|g" RKTRUST/RK3399TRUST.ini
-          ./tools/trust_merger RKTRUST/RK3399TRUST.ini
-          ./tools/loaderimage --pack --uboot ../u-boot/u-boot-dtb.bin uboot.img
-          ./tools/mkimage -n rk3399 -T rksd -d ../u-boot/spl/u-boot-spl.bin idbspl.img
-
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: rk3399-uboot
-          path: rkbin/*.img
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential uuid-dev iasl git nasm python3-distutils gcc-aarch64-linux-gnu
+      
+    - name: Clone EDK2 repositories
+      run: |
+        mkdir workspace-edk2
+        cd workspace-edk2
+        git clone https://github.com/tianocore/edk2.git -o 3a3713e62cfad00d78bb938b0d9fb1eedaeff314 --recursive --depth=1
+        git clone https://github.com/tianocore/edk2-platforms.git -o cfdc7f907d545b14302295b819ea078bc36c6a40 --recursive --depth=1
+        git clone https://github.com/edk2-porting/edk2-rk3399.git
+        cd edk2-rk3399
+      
+    - name: Build EDK2 for RK3399
+      run: |
+        bash build.sh --device polaris
