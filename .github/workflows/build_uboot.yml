@@ -2,17 +2,70 @@ name: Build U-Boot
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - '.github/workflows/build_uboot.yml'
+  workflow_dispatch:
 
 jobs:
   build:
+    name: Build U-Boot
     runs-on: ubuntu-20.04
-
     steps:
-    - uses: actions/checkout@v2
 
-    - name: Build
-      run: bash ./build.sh
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '2.x'
 
-    
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make sed git curl device-tree-compiler gcc-arm-none-eabi gcc-aarch64-linux-gnu libudev-dev libusb-1.0-0-dev dh-autoreconf
+          python2 -m pip --no-python-version-warning install --upgrade pip setuptools wheel pyelftools
+
+      - name: Clone repositories
+        run: |
+          git clone --depth 1 $GITHUB_SERVER_URL/ARM-software/arm-trusted-firmware
+          git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkbin
+          git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkdeveloptool
+          git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/u-boot
+
+      - name: Compile ATF
+        working-directory: arm-trusted-firmware
+        run: |
+          make realclean
+          make CROSS_COMPILE=aarch64-linux-gnu- PLAT=rk3399 bl31
+          cp build/rk3399/release/bl31/bl31.elf ../u-boot/
+
+      - name: Compile U-Boot
+        working-directory: u-boot
+        run: |
+          export ARCH=arm64
+          export CROSS_COMPILE=aarch64-linux-gnu-
+          sed -i -e 's/-Werror//' Makefile
+          make evb-rk3399_defconfig
+          make
+          make u-boot.itb
+
+      - name: Install rkdeveloptool
+        working-directory: rkdeveloptool
+        run: |
+          autoreconf -i
+          ./configure
+          make
+          sudo make install
+
+      - name: Packing image
+        working-directory: rkbin
+        run: |
+          cp ../arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf rk33
+          sed -i -e "s|bin/rk33/rk3399_bl3|$GITHUB_WORKSPACE/rkbin/bin/rk33/rk3399_bl3|g" RKTRUST/RK3399TRUST.ini
+          ./tools/trust_merger RKTRUST/RK3399TRUST.ini
+          ./tools/loaderimage --pack --uboot ../u-boot/u-boot-dtb.bin uboot.img
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: rk3399-uboot
+          path: rkbin/*.img
+          if-no-files-found: ignore
