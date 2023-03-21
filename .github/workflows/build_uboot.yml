@@ -23,7 +23,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y curl device-tree-compiler gcc-arm-none-eabi gcc-aarch64-linux-gnu libudev-dev libusb-1.0-0-dev dh-autoreconf
-          python2 -m pip --no-python-version-warning install --upgrade -r requirements.txt
+          python2 -m pip --no-python-version-warning --disable-pip-version-check install -r requirements.txt
 
       - name: Clone repositories
         run: |
