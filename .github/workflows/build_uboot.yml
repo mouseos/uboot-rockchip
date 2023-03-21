@@ -52,6 +52,7 @@ jobs:
           make evb-rk3399_defconfig
           make
           make u-boot.itb
+          ls -l
 
       - name: Install rkdeveloptool
         working-directory: rkdeveloptool
