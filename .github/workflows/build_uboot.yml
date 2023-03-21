@@ -48,7 +48,7 @@ jobs:
           #copy new config from this repository
           cp ../rk3399-evb.dts arch/arm/dts/rk3399-evb.dts
           #add bootdelay
-          echo "CONFIG_BOOTDELAY=5" >> u-boot/configs/evb-rk3399_defconfig
+          echo "CONFIG_BOOTDELAY=5" >> configs/evb-rk3399_defconfig
           make evb-rk3399_defconfig
           make
           make u-boot.itb
