@@ -44,7 +44,6 @@ sudo make install
 cd ..
 cp arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf rkbin/rk33
 # Fix bl31path
-sed -i 's|bin/rk33/rk3399_bl31_v1.35.elf|rkbin/rk33/bl31.elf|g' rkbin/RKTRUST/RK3399TRUST.ini
-sed -i 's/-Werror//' Makefile
+sed -i 's|bin/rk33/rk3399_bl31_v1.35.elf|/home/runner/evb_rk3399/arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf|g' rkbin/RKTRUST/RK3399TRUST.ini
 ./rkbin/tools/trust_merger rkbin/RKTRUST/RK3399TRUST.ini
 ./rkbin/tools/loaderimage --pack --uboot u-boot/u-boot-dtb.bin uboot.img
