@@ -1,7 +1,9 @@
 #!/bin/bash
 # Install toolchains
-sudo apt remove python3 python3-pip
-sudo apt install device-tree-compiler gcc-arm-none-eabi curl python2 gcc-aarch64-linux-gnu
+sudo apt install device-tree-compiler gcc-arm-none-eabi curl python2 gcc-aarch64-linux-gnu libusb-1.0-0
+#Change default python and pip version to python2
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip2 1
 #Install pip2
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
 sudo python2 get-pip.py
@@ -39,6 +41,6 @@ make
 sudo make install
 
 # Package the image for Rockchip miniloader
-cp arm-trusted-firmware/build/rk3399/release/bl31.elf rkbin/rk33
+cp arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf rkbin/rk33
 ./rkbin/tools/trust_merger rkbin/tools/RK3399TRUST.ini
 ./rkbin/tools/loaderimage --pack --uboot u-boot/u-boot-dtb.bin uboot.img
