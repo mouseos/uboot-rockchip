@@ -1,0 +1,30 @@
+name: Create Image File
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Create Image File
+        run: |
+          dd if=/dev/zero of=disk.img bs=512 count=285212672
+          echo "o\nn\np\n1\n64\n8079\nt\n1\n83\nn\np\n2\n16384\n24575\nn\np\n3\n24576\n32767\nn\np\n4\n32768\n262143\nn\np\n5\n262144\n24998910\nw\n" | fdisk disk.img
+          echo "loader1" | dd conv=notrunc bs=1 seek=$((0x40)) of=disk.img
+          echo "loader2" | dd conv=notrunc bs=1 seek=$((0x4000)) of=disk.img
+          echo "trust" | dd conv=notrunc bs=1 seek=$((0x6000)) of=disk.img
+          echo "boot" | dd conv=notrunc bs=1 seek=$((0x8000)) of=disk.img
+          echo "rootfs" | dd conv=notrunc bs=1 seek=$((0x40000)) of=disk.img
+
+      - name: Upload Image File
+        uses: actions/upload-artifact@v2
+        with:
+          name: disk-image
+          path: disk.img
