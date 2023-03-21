@@ -1,6 +1,6 @@
 #!/bin/bash
 # Install toolchains
-sudo apt install device-tree-compiler gcc-arm-none-eabi curl python2 gcc-aarch64-linux-gnu libusb-1.0-0
+sudo apt install device-tree-compiler gcc-arm-none-eabi curl python2 gcc-aarch64-linux-gnu libusb-1.0-0 libusb-1.0.0-dev
 #Change default python and pip version to python2
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 1
 sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip2 1
