@@ -23,7 +23,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y make sed git curl device-tree-compiler gcc-arm-none-eabi gcc-aarch64-linux-gnu libudev-dev libusb-1.0-0-dev dh-autoreconf
-          python2 -m pip --no-python-version-warning install --upgrade pip setuptools wheel pyelftools
+          python2 -m pip --no-python-version-warning install --upgrade -r requirements.txt
 
       - name: Clone repositories
         run: |
