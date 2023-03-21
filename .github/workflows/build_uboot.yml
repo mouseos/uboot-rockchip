@@ -3,7 +3,7 @@ name: Build U-Boot
 on:
   push:
     paths:
-      - '.github/workflows/build_uboot.yml'
+      - '**'
   workflow_dispatch:
 
 jobs:
