@@ -31,4 +31,14 @@ make evb-rk3399_defconfig
 make
 make u-boot.itb
 
-# The resulting images will be in the spl/ and . directories respectively.
+# Compile the rkdeveloptool
+cd ../rkdeveloptool
+autoreconf -i
+./configure
+make
+sudo make install
+
+# Package the image for Rockchip miniloader
+cp arm-trusted-firmware/build/rk3399/release/bl31.elf rkbin/rk33
+./rkbin/tools/trust_merger rkbin/tools/RK3399TRUST.ini
+./rkbin/tools/loaderimage --pack --uboot u-boot/u-boot-dtb.bin uboot.img
