@@ -58,6 +58,11 @@ jobs:
           ./configure
           make
           sudo make install
+          
+      - name: Create idbspl
+        working-directory: rkbin
+        run: |
+          ./tools/mkimage -n rk3399 -T rksd -d ../u-boot/spl/u-boot-spl.bin idbspl.img
 
       - name: Pack image
         working-directory: rkbin
