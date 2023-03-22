@@ -29,8 +29,8 @@ jobs:
           git clone --depth 1 $GITHUB_SERVER_URL/ARM-software/arm-trusted-firmware
           git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkbin
           git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkdeveloptool
-          git clone --depth 1 $GITHUB_SERVER_URL/JustEnoughLinuxOS/rk3399-uboot
-          mv rk3399-uboot u-boot
+          git clone --depth 1 $GITHUB_SERVER_URLxlloss/rockchip-rk3399-nanopi-m4-uboot
+          mv rockchip-rk3399-nanopi-m4-uboot u-boot
       - name: Compile ATF
         working-directory: arm-trusted-firmware
         run: |
