@@ -29,7 +29,8 @@ jobs:
           git clone --depth 1 $GITHUB_SERVER_URL/ARM-software/arm-trusted-firmware
           git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkbin
           git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkdeveloptool
-          git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/u-boot
+          git clone --depth 1 $GITHUB_SERVER_URL/JustEnoughLinuxOS/rk3399-uboot
+          mv rk3399-uboot u-boot
       - name: Compile ATF
         working-directory: arm-trusted-firmware
         run: |
@@ -42,7 +43,7 @@ jobs:
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
           sed -i -e 's/-Werror//' Makefile
-          cp ../rk3399-evb.dts arch/arm/dts/rk3399-evb.dts
+          #cp ../rk3399-evb.dts arch/arm/dts/rk3399-evb.dts
           echo "CONFIG_BOOTDELAY=5" >> configs/evb-rk3399_defconfig
           make evb-rk3399_defconfig
           make
