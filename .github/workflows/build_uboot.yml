@@ -46,7 +46,14 @@ jobs:
       - name: Create uboot.img
         working-directory: rkbin
         run: |
-           ./tools/loaderimage --pack --uboot ../u-boot/u-boot-dtb.bin uboot.img
+          ./tools/loaderimage --pack --uboot ../u-boot/u-boot-dtb.bin uboot.img
+      - name: Create sd.img
+        run: |
+          dd if=/dev/zero of=sd.img bs=1024k count=100
+          dd if=./u-boot/idbloader.img of=sd.img seek=64
+          dd if=./u-boot/u-boot.itb of=sd.img seek=16384
+          sync
+
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
@@ -56,3 +63,4 @@ jobs:
             u-boot/*.bin
             u-boot/*.itb
             u-boot/*.img
+            sd.img
