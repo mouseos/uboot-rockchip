@@ -32,8 +32,8 @@ jobs:
         run: |
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
-          make -j2 evb-rk3399_defconfig
-          make -j2 dtbs
+          make evb-rk3399_defconfig
+          #make -j2 dtbs
           ./make.sh evb-rk3399
  
       - name: Upload
