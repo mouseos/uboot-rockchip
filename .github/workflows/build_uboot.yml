@@ -32,6 +32,7 @@ jobs:
       - name: Compile U-Boot
         working-directory: u-boot
         run: |
+          cp ../rkbin/bin/rk33/rk3399_bl31_v1.35.elf bl31.elf
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
           sed -i -e 's/-Werror//' Makefile
