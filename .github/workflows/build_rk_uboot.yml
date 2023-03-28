@@ -32,10 +32,10 @@ jobs:
         run: |
           export ARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
-          make mrproper
-          make evb-rk3399_defconfig
+          mkdir out
+          make evb-rk3399_defconfig O=out
           #make -j2 dtbs
-          ./make.sh evb-rk3399
+          ./make.sh evb-rk3399 O=out
  
       - name: Upload
         uses: actions/upload-artifact@v3
