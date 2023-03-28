@@ -16,14 +16,14 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '2.x'
+          python-version: '3.x'
           cache: 'pip'
 
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y curl device-tree-compiler gcc-arm-none-eabi gcc-aarch64-linux-gnu libudev-dev libusb-1.0-0-dev dh-autoreconf
-          python2 -m pip --no-python-version-warning --disable-pip-version-check install -r requirements.txt
+          python -m pip --no-python-version-warning --disable-pip-version-check install -r requirements.txt
       - name: Clone repositories
         run: |
           git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkbin
