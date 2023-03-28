@@ -1,4 +1,4 @@
-name: Build U-Boot v2017
+name: Build U-Boot old 
 
 on:
   push:
@@ -13,26 +13,34 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-               
-      - name: Get U-Boot source
+
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
+          key: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
+      - name: Create directory
         run: |
-          wget https://github.com/rockchip-linux/u-boot/archive/refs/tags/release-20170417.zip
-          unzip *.zip
-          mv u-boot* u-boot
-        
+          mkdir u-boot
+          find . -maxdepth 1 -not -name . -not -name .. -not -name .github -not -name mkgpt.sh -not -name u-boot -exec mv {} u-boot/ \;
       - name: Install toolchain
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: u-boot
         run: |
-          sudo apt install device-tree-compiler gcc-aarch64-linux-gnu
+          sudo apt install kpartx
+          curl -#LO https://releases.linaro.org/components/toolchain/binaries/6.3-2017.05/aarch64-linux-gnu/gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu.tar.xz
+          tar xvf gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu.tar.xz -C ./
+          sudo ln -s $(pwd)/gcc-linaro*aarch64-linux-gnu /usr/local/gcc-linaro_aarch64-linux-gnu
           git clone https://github.com/rockchip-linux/rkbin --depth 1 ../rkbin
-        
+
       - name: Build U-Boot
         working-directory: u-boot
         run: |
           export ARCH=arm64
-          export CROSS_COMPILE=aarch64-linux-gnu-
-          make evb-rk3399_defconfig
+          export CROSS_COMPILE=/usr/local/gcc-linaro_aarch64-linux-gnu/bin/aarch64-linux-gnu-
+          sed -i -e s/"CROSS_COMPILE_ARM64.*"/"CROSS_COMPILE_ARM64=/usr/local/gcc-linaro_aarch64-linux-gnu/bin/aarch64-linux-gnu-"/g make.sh
+          make -j2 evb-rk3399_defconfig
           make -j2 dtbs
           ./make.sh evb-rk3399
  
