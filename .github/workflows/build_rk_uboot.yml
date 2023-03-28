@@ -39,8 +39,7 @@ jobs:
         run: |
           export ARCH=arm64
           export CROSS_COMPILE=/usr/local/gcc-linaro_aarch64-linux-gnu/bin/aarch64-linux-gnu-
-          sed -i -e s/"CROSS_COMPILE_ARM64.*"/"CROSS_COMPILE_ARM64=/usr/local/gcc-linaro_aarch64-linux-gnu/bin/aarch64-linux-gnu-"/g make.sh
-          make -j2 evb-rk3399_defconfig
+          sed -i -e 's/CROSS_COMPILE_ARM64.*/CROSS_COMPILE_ARM64=\/usr\/local\/gcc-linaro_aarch64-linux-gnu\/bin\/aarch64-linux-gnu-/g' make.sh          make -j2 evb-rk3399_defconfig
           make -j2 dtbs
           ./make.sh evb-rk3399
  
