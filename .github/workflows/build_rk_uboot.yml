@@ -1,4 +1,4 @@
-name: Build U-Boot v2017.09-rc4
+name: Build U-Boot v2017
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
                
       - name: Get U-Boot source
         run: |
-          wget https://github.com/rockchip-linux/u-boot/archive/refs/tags/release-20171218.zip
+          wget https://github.com/rockchip-linux/u-boot/archive/refs/tags/release-20170518.zip
           unzip *.zip
           mv u-boot* u-boot
         
