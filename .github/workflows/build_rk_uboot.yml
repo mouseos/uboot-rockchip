@@ -1,0 +1,55 @@
+name: Build U-Boot
+
+on:
+  push:
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build U-Boot
+    runs-on: ubuntu-20.04
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
+          key: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
+               
+      - name: Clone U-Boot
+        run: |
+          git clone https://gitlab.com/u-boot/u-boot -b v2017.09-rc4 --depth 1
+        
+      - name: Install toolchain
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: u-boot
+        run: |
+          sudo apt install kpartx
+          curl -#LO https://releases.linaro.org/components/toolchain/binaries/6.3-2017.05/aarch64-linux-gnu/gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu.tar.xz
+          tar xvf gcc-linaro-6.3.1-2017.05-x86_64_aarch64-linux-gnu.tar.xz -C ./
+          sudo ln -s $(pwd)/gcc-linaro*aarch64-linux-gnu /usr/local/gcc-linaro_aarch64-linux-gnu
+          git clone https://github.com/rockchip-linux/rkbin --depth 1 ../rkbin
+        
+      - name: Build U-Boot
+        working-directory: u-boot
+        run: |
+          export ARCH=arm64
+          export CROSS_COMPILE=/usr/local/gcc-linaro_aarch64-linux-gnu/bin/aarch64-linux-gnu-
+          make -j2 evb-rk3399_defconfig
+          make -j2 dtbs
+          ./make.sh evb-rk3399
+ 
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: evb-rk3399-uboot
+          path: |
+            u-boot/*.bin 
+            u-boot/*.img
+            gpt.img.xz
+          if-no-files-found: ignore
