@@ -26,17 +26,9 @@ jobs:
           python2 -m pip --no-python-version-warning --disable-pip-version-check install -r requirements.txt
       - name: Clone repositories
         run: |
-          git clone --depth 1 $GITHUB_SERVER_URL/ARM-software/arm-trusted-firmware
           git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkbin
-          git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkdeveloptool
-          git clone --depth 1 $GITHUB_SERVER_URL/xlloss/rockchip-rk3399-nanopi-m4-uboot
-          mv rockchip-rk3399-nanopi-m4-uboot u-boot
-      - name: Compile ATF
-        working-directory: arm-trusted-firmware
-        run: |
-          make realclean
-          make CROSS_COMPILE=aarch64-linux-gnu- PLAT=rk3399 bl31
-          cp build/rk3399/release/bl31/bl31.elf ../u-boot/
+          git clone --depth 1 $GITHUB_SERVER_URL/u-boot/u-boot
+
       - name: Compile U-Boot
         working-directory: u-boot
         run: |
@@ -44,25 +36,18 @@ jobs:
           export CROSS_COMPILE=aarch64-linux-gnu-
           sed -i -e 's/-Werror//' Makefile
           #cp ../rk3399-evb.dts arch/arm/dts/rk3399-evb.dts
-          echo "CONFIG_BOOTDELAY=5" >> configs/evb-rk3399_defconfig
-          make evb-rk3399_defconfig
+          #echo "CONFIG_BOOTDELAY=5" >> configs/evb-rk3399_defconfig
+          make nanopi-neo4-rk3399_defconfig
           make
-          make u-boot.itb
-      - name: Install rkdeveloptool
-        working-directory: rkdeveloptool
-        run: |
-          autoreconf -i
-          ./configure
-          make
-          sudo make install
-      - name: Pack image
+      - name: Create trust.img
         working-directory: rkbin
         run: |
-          cp ../arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf rk33 
-          sed -i -e "s|bin/rk33/rk3399_bl3|$GITHUB_WORKSPACE/rkbin/bin/rk33/rk3399_bl3|g" RKTRUST/RK3399TRUST.ini
           ./tools/trust_merger RKTRUST/RK3399TRUST.ini
-          ./tools/loaderimage --pack --uboot ../u-boot/u-boot-dtb.bin uboot.img
-          ./tools/mkimage -n rk3399 -T rksd -d ../u-boot/spl/u-boot-spl.bin idbspl.img
+          
+      - name: Create uboot.img
+        working-directory: rkbin
+        run: |
+           ./tools/loaderimage --pack --uboot ../u-boot/u-boot-dtb.bin uboot.img
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
