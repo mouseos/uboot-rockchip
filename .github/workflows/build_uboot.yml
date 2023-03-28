@@ -36,7 +36,7 @@ jobs:
           export BL31=../rkbin/bin/rk33/rk3399_bl31_v1.35.elf
           export ARCH=arm64
           sed -i -e 's/-Werror//' Makefile
-          make pinephone-pro-rk3399_defconfig
+          make evb-rk3399_defconfig
           make CROSS_COMPILE=aarch64-linux-gnu- -j4
       - name: Create trust.img
         working-directory: rkbin
