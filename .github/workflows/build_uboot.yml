@@ -27,7 +27,7 @@ jobs:
       - name: Clone repositories
         run: |
           git clone --depth 1 $GITHUB_SERVER_URL/rockchip-linux/rkbin
-          git clone --depth 1 $GITHUB_SERVER_URL/u-boot/u-boot
+          git clone --depth 1 $GITHUB_SERVER_URL/u-boot/u-boot -b WIP/19Aug2019
 
       - name: Compile U-Boot
         working-directory: u-boot
