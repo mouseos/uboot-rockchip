@@ -32,14 +32,14 @@ jobs:
       - name: Compile U-Boot
         working-directory: u-boot
         run: |
-          cp ../rkbin/bin/rk33/rk3399_bl31_v1.35.elf atf-bl31
+          #cp ../rkbin/bin/rk33/rk3399_bl31_v1.35.elf atf-bl31
+          export BL31=../rkbin/bin/rk33/rk3399_bl31_v1.35.elf
           export ARCH=arm64
-          export CROSS_COMPILE=aarch64-linux-gnu-
           sed -i -e 's/-Werror//' Makefile
           #cp ../rk3399-evb.dts arch/arm/dts/rk3399-evb.dts
           #echo "CONFIG_BOOTDELAY=5" >> configs/evb-rk3399_defconfig
-          make pinephone-pro-rk3399_defconfig
-          make
+          make evb-rk3399_defconfig
+          make CROSS_COMPILE=aarch64-linux-gnu- -j4
       - name: Create trust.img
         working-directory: rkbin
         run: |
