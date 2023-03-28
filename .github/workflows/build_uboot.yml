@@ -53,4 +53,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: rk3399-uboot
-          path: rkbin/*.img
+          path: |
+            rkbin/*.img
+            u-boot/*.bin
+            u-boot/*.itb
+            u-boot/*.img
