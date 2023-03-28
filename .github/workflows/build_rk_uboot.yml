@@ -25,6 +25,7 @@ jobs:
         run: |
           wget https://github.com/rockchip-linux/u-boot/archive/refs/tags/release-20171107.zip
           unzip *.zip
+          mv u-boot* u-boot
         
       - name: Install toolchain
         if: steps.cache.outputs.cache-hit != 'true'
