@@ -50,7 +50,7 @@ jobs:
       - name: Create sd.img
         run: |
           dd if=/dev/zero of=sd.img bs=1024k count=100
-          dd if=./u-boot/idbloader.img of=sd.img seek=64
+          dd if=./idbloader.img of=sd.img seek=64
           dd if=./u-boot/u-boot.itb of=sd.img seek=16384
           sync
 
