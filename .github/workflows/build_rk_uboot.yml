@@ -16,7 +16,7 @@ jobs:
                
       - name: Get U-Boot source
         run: |
-          wget https://github.com/rockchip-linux/u-boot/archive/refs/tags/release-20171107.zip
+          wget https://github.com/rockchip-linux/u-boot/archive/refs/tags/release-20171218.zip
           unzip *.zip
           mv u-boot* u-boot
         
