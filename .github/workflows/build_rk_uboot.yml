@@ -20,10 +20,11 @@ jobs:
         with:
           path: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
           key: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
-      - name: Create directory
+      - name: Get uboot
         run: |
-          mkdir u-boot
-          find . -maxdepth 1 -not -name . -not -name .. -not -name .github -not -name mkgpt.sh -not -name u-boot -exec mv {} u-boot/ \;
+          wget https://github.com/rockchip-linux/u-boot/archive/refs/tags/release-20171218.zip
+          unzip *zip
+          mv u-boot* u-boot
       - name: Install toolchain
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: u-boot
