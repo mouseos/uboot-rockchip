@@ -2,6 +2,8 @@ name: Build U-Boot
 
 on:
   push:
+    branches:
+      - .github/workflows/build_uboot.yml
   workflow_dispatch:
 
 jobs:
