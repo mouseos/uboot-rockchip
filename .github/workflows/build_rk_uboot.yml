@@ -22,9 +22,8 @@ jobs:
           key: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
       - name: Get uboot
         run: |
-          wget https://github.com/rockchip-linux/u-boot/archive/refs/tags/release-20171218.zip
-          unzip *zip
-          mv u-boot* u-boot
+          git clone https://github.com/rockchip-linux/u-boot
+          git checkout g328b07b52e
       - name: Install toolchain
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: u-boot
