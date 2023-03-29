@@ -23,7 +23,7 @@ jobs:
       - name: Get uboot
         run: |
           git clone https://github.com/u-boot/u-boot
-          git checkout g328b07b52e
+          git checkout 2017.09-g328b07b52e
       - name: Install toolchain
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: u-boot
